@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VYNE FOOTWEAR // MODEL 01</title>
+  <style>
+    :root {
+      /* Default: Forbidden Grape */
+      --accent: #9d4edd;
+      --accent-glow: rgba(157, 78, 221, 0.35);
+      --bg-dark: #0a0a0c;
+      --bg-tint: #160d24;
+      --panel-bg: rgba(18, 18, 22, 0.88);
+      --border-color: #27272e;
+      --text-main: #f4f4f6;
+      --text-muted: #8e8e98;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 35%, var(--bg-tint) 0%, var(--bg-dark) 75%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: background 0.5s ease;
+      overflow-x: hidden;
+    }
+
+    /* Active Technical Grid & Ambient Glow */
+    .active-grid {
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(circle at center, black 35%, transparent 85%);
+      -webkit-mask-image: radial-gradient(circle at center, black 35%, transparent 85%);
+      pointer-events: none;
+      z-index: 0;
+      animation: gridDrift 18s linear infinite;
+    }
+
+    @keyframes gridDrift {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(48px); }
+    }
+
+    .ambient-glow {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 65vw;
+      height: 65vw;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      transition: background 0.5s ease;
+      animation: pulseGlow 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.75; }
+      100% { transform: translate(-50%, -50%) scale(1.08); opacity: 1; }
+    }
+
+    header, footer {
+      position: relative;
+      z-index: 2;
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+    }
+
+    footer {
+      border-bottom: none;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-muted);
+    }
+
+    .brand-logo {
+      font-weight: bold;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .vyne-svg-logo {
+      height: 36px;
+      width: auto;
+      display: block;
+      filter: drop-shadow(0 0 10px var(--accent-glow));
+      transition: filter 0.3s ease;
+    }
+
+    .vyne-svg-accent {
+      fill: var(--accent);
+      transition: fill 0.3s ease;
+    }
+
+    .status-badge {
+      padding: 0.25rem 0.6rem;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-size: 0.75rem;
+      transition: all 0.3s ease;
+    }
+
+    main {
+      position: relative;
+      z-index: 2;
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    /* Sneaker Showcase Box */
+    .showcase-frame {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      padding: 2rem;
+      position: relative;
+      aspect-ratio: 4 / 3;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+    }
+
+    .frame-corner {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-color: var(--accent);
+      border-style: solid;
+      transition: border-color 0.3s ease;
+    }
+
+    .top-left { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+    .top-right { top: -1px; right: -1px; border-width: 2px 2px 0 0; }
+    .bottom-left { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; }
+    .bottom-right { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+    .sneaker-display {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .sneaker-display img {
+      max-width: 100%;
+      max-height: 280px;
+      object-fit: contain;
+      filter: drop-shadow(0 15px 25px var(--accent-glow));
+      transition: transform 0.3s ease, filter 0.4s ease;
+    }
+
+    .sneaker-display img:hover {
+      transform: scale(1.03) rotate(-1deg);
+    }
+
+    .tech-overlay-lines {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Product Controls & Specs */
+    .controls-panel h1 {
+      font-size: 2.2rem;
+      letter-spacing: 3px;
+      margin-bottom: 0.5rem;
+    }
+
+    .colorway-title {
+      font-size: 1.1rem;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: color 0.3s ease;
+    }
+
+    .spec-grid {
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 0;
+      margin-bottom: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      font-size: 0.8rem;
+    }
+
+    .spec-label {
+      color: var(--text-muted);
+    }
+
+    /* Swatch Buttons */
+    .swatch-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+      letter-spacing: 1.5px;
+    }
+
+    .swatch-group {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .swatch-btn {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.85rem 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.25s ease;
+    }
+
+    .swatch-btn:hover {
+      border-color: var(--text-muted);
+    }
+
+    .swatch-btn.active {
+      border-color: var(--accent);
+      box-shadow: inset 0 0 12px var(--accent-glow);
+    }
+
+    .color-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .cta-btn {
+      width: 100%;
+      padding: 1rem;
+      background: var(--accent);
+      color: #050505;
+      border: none;
+      font-weight: bold;
+      font-size: 0.95rem;
+      letter-spacing: 2px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: background 0.3s ease, transform 0.15s ease;
+    }
+
+    .cta-btn:hover {
+      opacity: 0.9;
+    }
+
+    .cta-btn:active {
+      transform: scale(0.99);
+    }
+
+    /* Custom Toast Notification */
+    .toast-banner {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(150%);
+      background: var(--panel-bg);
+      border: 1px solid var(--accent);
+      color: var(--text-main);
+      padding: 0.85rem 1.5rem;
+      font-size: 0.8rem;
+      letter-spacing: 1.5px;
+      z-index: 10;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      transition: transform 0.35s ease, border-color 0.3s ease;
+    }
+
+    .toast-banner.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 800px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="active-grid"></div>
+  <div class="ambient-glow"></div>
+
+  <header>
+    <div class="brand-logo" aria-label="VYNE Footwear">
+      <!-- Custom VYNE Wordmark with 4-Point Star Emblem -->
+      <svg class="vyne-svg-logo" viewBox="0 0 280 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- 4-Point Star Above Y -->
+        <path class="vyne-svg-accent" d="M106 1L109.5 11.5L124 14.5L109.5 17.5L106 28L102.5 17.5L88 14.5L102.5 11.5L106 1Z" />
+        <!-- Sweeping V -->
+        <path d="M8 22H26L62 49L98 22H114L67 58H55L8 22Z" fill="#f4f4f6" />
+        <!-- Sharp Y Stem -->
+        <path d="M98 37H114V58H98V37Z" fill="#f4f4f6" />
+        <!-- Slanted Angular N -->
+        <path d="M126 22H143L174 44V22H190V58H173L142 36V58H126V22Z" fill="#f4f4f6" />
+        <!-- Sleek Horizontal E -->
+        <path d="M202 22H272V29H218V36.5H264V43.5H218V51H272V58H202V22Z" fill="#f4f4f6" />
+      </svg>
+      <span>// NZ</span>
+    </div>
+    <div class="status-badge" id="sku-code">SKU: VYN-M01-GRP</div>
+  </header>
+
+  <main>
+    <!-- Visual Showcase -->
+    <div class="showcase-frame">
+      <div class="frame-corner top-left"></div>
+      <div class="frame-corner top-right"></div>
+      <div class="frame-corner bottom-left"></div>
+      <div class="frame-corner bottom-right"></div>
+
+      <div class="tech-overlay-lines">
+        <span>UPPER: MULTI-LAYER MESH / TPU</span>
+        <span>SILHOUETTE: Y2K TECH-RUNNER</span>
+      </div>
+
+      <div class="sneaker-display">
+        <!-- Swap src with your actual transparent PNG files in your repo (e.g., images/grape.png) -->
+        <img id="shoe-image" src="https://placehold.co/600x350/121216/9d4edd?text=MODEL+01+FORBIDDEN+GRAPE" alt="VYNE Model 01" />
+      </div>
+
+      <div class="tech-overlay-lines">
+        <span>GEOMETRIC OVERLAY: V1.4</span>
+        <span id="batch-info">BATCH: 001 // LIMITED</span>
+      </div>
+    </div>
+
+    <!-- Controls & Metadata -->
+    <div class="controls-panel">
+      <h1>MODEL 01</h1>
+      <div class="colorway-title" id="colorway-name">// FORBIDDEN GRAPE</div>
+
+      <div class="spec-grid">
+        <div><span class="spec-label">CHASSIS:</span><br/>Y2K Geometric Cage</div>
+        <div><span class="spec-label">UPPER:</span><br/>Breathable Open Mesh</div>
+        <div><span class="spec-label">PALETTE:</span><br/><span id="palette-desc">Deep Violet / Obsidian</span></div>
+        <div><span class="spec-label">STATUS:</span><br/>Pre-Drop Access</div>
+      </div>
+
+      <div class="swatch-label">SELECT ORGANIC VARIANT:</div>
+      <div class="swatch-group">
+        <button class="swatch-btn active" onclick="setColorway('grape', this)">
+          <span class="color-dot" style="background: #9d4edd;"></span>
+          Forbidden Grape
+        </button>
+        <button class="swatch-btn" onclick="setColorway('kiwi', this)">
+          <span class="color-dot" style="background: #70e000;"></span>
+          Toxic Kiwi
+        </button>
+        <button class="swatch-btn" onclick="setColorway('blueberry', this)">
+          <span class="color-dot" style="background: #3a86ff;"></span>
+          Dark Blueberry
+        </button>
+        <button class="swatch-btn" onclick="setColorway('strawberry', this)">
+          <span class="color-dot" style="background: #ff2a55;"></span>
+          Wild Strawberry
+        </button>
+      </div>
+
+      <button class="cta-btn" onclick="notifyDrop()">
+        NOTIFY ON DROP
+      </button>
+    </div>
+  </main>
+
+  <div class="toast-banner" id="toast-banner">
+    // ADDED TO VYNE MODEL 01 DROP NOTIFY LIST
+  </div>
+
+  <footer>
+    <div>HAMILTON, AOTEAROA</div>
+    <div>© 2026 VYNE FOOTWEAR</div>
+  </footer>
+
+  <script>
+    const colorways = {
+      grape: {
+        name: "// FORBIDDEN GRAPE",
+        sku: "SKU: VYN-M01-GRP",
+        palette: "Deep Violet / Obsidian",
+        accent: "#9d4edd",
+        glow: "rgba(157, 78, 221, 0.38)",
+        bgTint: "#160d24",
+        img: "https://placehold.co/600x350/121216/9d4edd?text=MODEL+01+FORBIDDEN+GRAPE"
+      },
+      kiwi: {
+        name: "// TOXIC KIWI",
+        sku: "SKU: VYN-M01-KIW",
+        palette: "Acid Lime / Graphite",
+        accent: "#70e000",
+        glow: "rgba(112, 224, 0, 0.32)",
+        bgTint: "#0e1a0a",
+        img: "https://placehold.co/600x350/121216/70e000?text=MODEL+01+TOXIC+KIWI"
+      },
+      blueberry: {
+        name: "// DARK BLUEBERRY",
+        sku: "SKU: VYN-M01-BLU",
+        palette: "Cobalt Surge / Matte Black",
+        accent: "#3a86ff",
+        glow: "rgba(58, 134, 255, 0.38)",
+        bgTint: "#0a1324",
+        img: "https://placehold.co/600x350/121216/3a86ff?text=MODEL+01+DARK+BLUEBERRY"
+      },
+      strawberry: {
+        name: "// WILD STRAWBERRY",
+        sku: "SKU: VYN-M01-STR",
+        palette: "Crimson Pulse / Carbon",
+        accent: "#ff2a55",
+        glow: "rgba(255, 42, 85, 0.38)",
+        bgTint: "#210a10",
+        img: "https://placehold.co/600x350/121216/ff2a55?text=MODEL+01+WILD+STRAWBERRY"
+      }
+    };
+
+    function setColorway(key, btnElement) {
+      const data = colorways[key];
+      const root = document.documentElement;
+
+      // Update CSS variables
+      root.style.setProperty('--accent', data.accent);
+      root.style.setProperty('--accent-glow', data.glow);
+      root.style.setProperty('--bg-tint', data.bgTint);
+
+      // Update Text & Image
+      document.getElementById('colorway-name').textContent = data.name;
+      document.getElementById('sku-code').textContent = data.sku;
+      document.getElementById('palette-desc').textContent = data.palette;
+      document.getElementById('shoe-image').src = data.img;
+
+      // Update Active Button State
+      document.querySelectorAll('.swatch-btn').forEach(btn => btn.classList.remove('active'));
+      btnElement.classList.add('active');
+    }
+
+    let toastTimeout;
+    function notifyDrop() {
+      const toast = document.getElementById('toast-banner');
+      toast.classList.add('show');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+  </script>
+
+</body>
+</html>
